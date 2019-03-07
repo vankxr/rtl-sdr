@@ -389,6 +389,24 @@ RTLSDR_API int rtlsdr_cancel_async(rtlsdr_dev_t *dev);
  */
 RTLSDR_API int rtlsdr_set_bias_tee(rtlsdr_dev_t *dev, int on);
 
+// GPIO
+RTLSDR_API void rtlsdr_set_gpio_dir(rtlsdr_dev_t *dev, uint16_t val);
+RTLSDR_API uint16_t rtlsdr_get_gpio_dir(rtlsdr_dev_t *dev);
+
+RTLSDR_API void rtlsdr_set_gpio_out_en(rtlsdr_dev_t *dev, uint16_t val);
+RTLSDR_API uint16_t rtlsdr_get_gpio_out_en(rtlsdr_dev_t *dev);
+
+RTLSDR_API void rtlsdr_set_gpio_out(rtlsdr_dev_t *dev, uint16_t val);
+RTLSDR_API uint16_t rtlsdr_get_gpio_out(rtlsdr_dev_t *dev);
+
+RTLSDR_API uint16_t rtlsdr_get_gpio_in(rtlsdr_dev_t *dev);
+
+// I2C
+RTLSDR_API int rtlsdr_i2c_write(rtlsdr_dev_t *dev, uint8_t i2c_addr, uint8_t *buffer, int len);
+RTLSDR_API int rtlsdr_i2c_read(rtlsdr_dev_t *dev, uint8_t i2c_addr, uint8_t *buffer, int len);
+
+RTLSDR_API void rtlsdr_set_i2c_repeater(rtlsdr_dev_t *dev, int on);
+
 #ifdef __cplusplus
 }
 #endif

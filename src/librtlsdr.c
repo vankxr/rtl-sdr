@@ -555,25 +555,60 @@ int rtlsdr_demod_write_reg(rtlsdr_dev_t *dev, uint8_t page, uint16_t addr, uint1
 	return (r == len) ? 0 : -1;
 }
 
+void rtlsdr_set_gpio_dir(rtlsdr_dev_t *dev, uint16_t val)
+{
+	rtlsdr_write_reg(dev, SYSB, GPD, val, 1);
+}
+
+uint16_t rtlsdr_get_gpio_dir(rtlsdr_dev_t *dev)
+{
+	return rtlsdr_read_reg(dev, SYSB, GPD, 1);
+}
+
+void rtlsdr_set_gpio_out_en(rtlsdr_dev_t *dev, uint16_t val)
+{
+	rtlsdr_write_reg(dev, SYSB, GPOE, val, 1);
+}
+
+uint16_t rtlsdr_get_gpio_out_en(rtlsdr_dev_t *dev)
+{
+	return rtlsdr_read_reg(dev, SYSB, GPOE, 1);
+}
+
+void rtlsdr_set_gpio_out(rtlsdr_dev_t *dev, uint16_t val)
+{
+	rtlsdr_write_reg(dev, SYSB, GPO, val, 1);
+}
+
+uint16_t rtlsdr_get_gpio_out(rtlsdr_dev_t *dev)
+{
+	return rtlsdr_read_reg(dev, SYSB, GPO, 1);
+}
+
+uint16_t rtlsdr_get_gpio_in(rtlsdr_dev_t *dev)
+{
+	return rtlsdr_read_reg(dev, SYSB, GPI, 1);
+}
+
 void rtlsdr_set_gpio_bit(rtlsdr_dev_t *dev, uint8_t gpio, int val)
 {
 	uint16_t r;
 
 	gpio = 1 << gpio;
-	r = rtlsdr_read_reg(dev, SYSB, GPO, 1);
+	r = rtlsdr_get_gpio_out(dev);
 	r = val ? (r | gpio) : (r & ~gpio);
-	rtlsdr_write_reg(dev, SYSB, GPO, r, 1);
+	rtlsdr_set_gpio_out(dev, r);
 }
 
 void rtlsdr_set_gpio_output(rtlsdr_dev_t *dev, uint8_t gpio)
 {
-	int r;
+	uint16_t r;
 	gpio = 1 << gpio;
 
-	r = rtlsdr_read_reg(dev, SYSB, GPD, 1);
-	rtlsdr_write_reg(dev, SYSB, GPD, r & ~gpio, 1);
-	r = rtlsdr_read_reg(dev, SYSB, GPOE, 1);
-	rtlsdr_write_reg(dev, SYSB, GPOE, r | gpio, 1);
+	r = rtlsdr_get_gpio_dir(dev);
+	rtlsdr_set_gpio_dir(dev, r & ~gpio);
+	r = rtlsdr_get_gpio_out_en(dev);
+	rtlsdr_set_gpio_out_en(dev, r | gpio);
 }
 
 void rtlsdr_set_i2c_repeater(rtlsdr_dev_t *dev, int on)
